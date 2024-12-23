@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Timer with Background Video</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    #background-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .timer-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 48px;
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .start-btn, .reset-btn {
+      font-size: 24px;
+      padding: 10px 20px;
+      background-color: #000000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .start-btn:hover, .reset-btn:hover {
+      background-color: #333333;
+    }
+  </style>
+</head>
+<body>
+    <video autoplay muted loop id="background-video">
+        <source src="earth.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      
+
+  <div class="timer-container">
+    <div id="timer">00:00</div>
+    <button class="start-btn" id="startButton">Start Timer</button>
+    <button class="reset-btn" id="resetButton">Reset Timer</button>
+  </div>
+
+  <script>
+    let timer;
+    let seconds = 0;
+    let isRunning = false;
+
+    function startTimer() {
+      if (!isRunning) {
+        isRunning = true;
+        timer = setInterval(function() {
+          seconds++;
+          const minutes = Math.floor(seconds / 60);
+          const remainingSeconds = seconds % 60;
+          document.getElementById("timer").textContent =
+            `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+        }, 1000);
+        document.getElementById("startButton").textContent = "Stop Timer";
+      } else {
+        clearInterval(timer);
+        isRunning = false;
+        document.getElementById("startButton").textContent = "Start Timer";
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      isRunning = false;
+      seconds = 0;
+      document.getElementById("timer").textContent = "00:00";
+      document.getElementById("startButton").textContent = "Start Timer";
+    }
+
+    function padZero(num) {
+      return num < 10 ? `0${num}` : num;
+    }
+
+    document.getElementById("startButton").addEventListener("click", startTimer);
+    document.getElementById("resetButton").addEventListener("click", resetTimer);
+  </script>
+</body>
+</html>
